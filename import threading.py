@@ -31,7 +31,7 @@ def register():
     else:
         password = input("Введите пароль: ")
         users[username] = password
-        threading.Thread(target=save_users, args=(users,)).start() 
+        save_users(users)
         print("Регистрация успешна.")
 
 def login():
@@ -45,9 +45,9 @@ def login():
         print("Неверное имя пользователя или пароль.")
         return None
 
-def calculate(username):
+def calculate():
     while True:
-        operation = input("\nВведите операцию (+, -, *, /, **, sqrt или 'exit' для выхода): ")
+        operation = input("\nВведите операцию ( +, -, *, /, **, sqrt или 'exit' для выхода): ")
         if operation == 'exit':
             break
         if operation in ['+', '-', '*', '/', '**', 'sqrt']:
@@ -64,12 +64,12 @@ def calculate(username):
                 elif operation == '*':
                     result = num1 * num2
                 elif operation == '/':
-                    result = num1 / num2 if num2 != 0 else 'Ошибка: Деление на ноль'
+                    result = num1 / num2
                 elif operation == '**':
                     result = num1 ** num2
             
             print(f"Результат: {result}")
-            threading.Thread(target=save_calculation, args=(operation, num1, num2 if operation != 'sqrt' else None, result)).start()
+            save_calculation(operation, num1, num2 if operation != 'sqrt' else None, result)
         else:
             print("Неверная операция.")
 
@@ -91,11 +91,11 @@ def main():
     while True:
         choice = input("\n1. Регистрация\n2. Авторизация\n3. Выход\nВыберите опцию: ")
         if choice == '1':
-            register()
+            threading.Thread(target=register).start()
         elif choice == '2':
             username = login()
             if username:
-                calculate(username)
+                calculate()
         elif choice == '3':
             break
         else:
